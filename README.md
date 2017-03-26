@@ -10,6 +10,8 @@ using the make function, You can generate the JavaScript code and CSS settings n
 It works fine with chrome and firefox,
 but IE does not work correctly with numbers and colors input tag of HTML5 .
 
+Demo: [http://52.78.20.235/cd9](http://52.78.20.235/cd9/)/
+
 ![](https://github.com/gujc71/cd9/blob/master/cd9.png?raw=true)
 
 License: MIT
