@@ -227,7 +227,7 @@ function legendPositionChange(){
 </head>    
 <body>
 
-<div class="leftWindow">
+<div class="leftWindow" style="width:500px">
     <div id='previewEditor' class='editorWindow'>
         <div id='chart'></div>
     </div>
@@ -390,9 +390,11 @@ function legendPositionChange(){
 
 
     <div id='codeWindow' style='min-height:150px; height: 170px' class='editorWindow'>
-        <input type='button' value='preview' onclick='previewChart()'>
-        <input type='button' value='Make Code & Copy' onclick='makeChart()'>
-        <a href="http://jsbeautifier.org/" target="-" title="Click for more organized code">jsbeautifier.org</a>
+		<div>
+			<input type='button' value='preview' onclick='previewChart()'>
+			<input type='button' value='Make Code & Copy' onclick='makeChart()'>
+			<a href="http://jsbeautifier.org/" target="-" title="Click for more organized code">jsbeautifier.org</a>
+		</div>
         <textarea id="codeEditor" class="codeEditor" style='width: 98%; height:85%;' wrap="off" ></textarea>
     </div>
 </div>

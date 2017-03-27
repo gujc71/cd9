@@ -22,29 +22,6 @@ function addStyle(id, src){
 	style.innerHTML = src;
 }
 	
-    function toArray(C) {
-        var B = C.length,
-            A = new Array(B);
-        while (B--) {
-            A[B] = C[B]
-        }
-        return A
-    };
-Function.prototype.closureListener = function() {
-    var A = this,
-        C = toArray(arguments), 
-        B = C.shift();
-    return function(E) {
-        E = E || window.event;
-        if (E.target) {
-            var D = E.target
-        } else {
-            var D = E.srcElement
-        }
-        return A.apply(B, [E, D].concat(C))
-    }
-};
-
 // ///////////////////////////////////////////////////////////////////////////
 function TableClass(target, dataset) {
 	this.dataTable = d3.select("#"+target).append("table");
@@ -58,7 +35,7 @@ function TableClass(target, dataset) {
 		.enter()
 		.append("td")
 			.text(function( d ) { return d; })
-			.on("mousedown", this.tdMousedown.closureListener(this));
+			.on("mousedown", this.tdMousedown);
 
 	
 	this.hiddenDiv = document.createElement( 'div');
@@ -74,14 +51,14 @@ function TableClass(target, dataset) {
 TableClass.prototype.tdMousedown = function(){
 	if (d3.event.target.nodeName !== 'TD') return;
 	
-	if (this.selectTD) {
-		this.selectTD.innerText = this.input.value;
+	if (tableClass.selectTD) {
+		tableClass.selectTD.innerText = tableClass.input.value;
 	}
-	this.selectTD = d3.event.target;
-	this.input.value = this.selectTD.innerText;
-	this.selectTD.innerHTML = '';
-	this.selectTD.appendChild(this.input);
-	this.input.focus();
+	tableClass.selectTD = d3.event.target;
+	tableClass.input.value = tableClass.selectTD.innerText;
+	tableClass.selectTD.innerHTML = '';
+	tableClass.selectTD.appendChild(tableClass.input);
+	tableClass.input.focus();
 }
 
 	
@@ -139,7 +116,7 @@ TableClass.prototype.insertRow = function(){
 	for (var x = 0; x < tr.cells.length; x++){
 		var newTD = tr.cells[x].cloneNode(true);
 		newTD.innerHTML = '';
-		d3.select(newTD).on('mousedown', this.tdMousedown.closureListener(this));
+		d3.select(newTD).on('mousedown', this.tdMousedown);
 		
 		newTR.insertBefore(newTD, null);
 	}
