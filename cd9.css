@@ -3,16 +3,18 @@ body{
 	font-family: "Arial";
 }
 
+.leftWindow, .rightWindow {
+	float: left;
+	margin: 5px;
+}
+
 .editorWindow {
 	border: 1px solid;
+	width: 100%;
 	min-height: 300px;
 	margin: 5px;
 	padding: 2px;
 }	
-
-.leftWindow, .rightWindow {
-	float: left;
-}
 
 .dataDiv {
 	overflow: scroll;
@@ -43,30 +45,37 @@ body{
 }
 
 ///////////////////////////////////////////////
+
 .chartProperty {
-	width: 500px;
+	width: 100%;
 	margin-top: 5px;
 }  
 
 .captionTD {
 	padding: 3px;
-	width: 60px;
+	width: 15%;
 	text-align:right;
 }
 .inputTD {
 	vertical-align: middle;
 	padding: 3px;
-	width: 150px;
+	width: 35%;
 }
 .inputTD3 {
 	vertical-align: middle;
 	padding: 3px;
 }
 
+.inputBoxSmall, 
 .inputBox {
 	padding-left: 3px;
 	border: 1px solid  #c5c5c5;
 	width: 60px;
+}
+
+.inputBoxSmall{
+	width: 40px;
+	margin-right: 10px;
 }
 
 .inputColor {

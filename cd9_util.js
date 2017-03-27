@@ -4,6 +4,10 @@ function getElement(id) {
     return document.getElementById(id);
 }
 
+function getElementInt(id) {
+    return parseInt(document.getElementById(id).value);
+}
+
 function addStyle(id, src){
 	var a = document.getElementById(id);
 	if (a) {
@@ -12,7 +16,6 @@ function addStyle(id, src){
 	
 	var style = document.createElement("style");
 	style.id = id;
-//	js.type = "text/javascript";
 	if (document.head)
 		 document.head.appendChild(style);
 	else document.getElementsByTagName("head")[0].appendChild(style);
@@ -55,7 +58,7 @@ function TableClass(target, dataset) {
 		.enter()
 		.append("td")
 			.text(function( d ) { return d; })
-			.on("mousedown", this.tdMousedown.closureListener(this))
+			.on("mousedown", this.tdMousedown.closureListener(this));
 
 	
 	this.hiddenDiv = document.createElement( 'div');
@@ -69,12 +72,12 @@ function TableClass(target, dataset) {
 
 
 TableClass.prototype.tdMousedown = function(){
-	if (event.target.nodeName !== 'TD') return;
+	if (d3.event.target.nodeName !== 'TD') return;
 	
 	if (this.selectTD) {
 		this.selectTD.innerText = this.input.value;
 	}
-	this.selectTD = event.target;
+	this.selectTD = d3.event.target;
 	this.input.value = this.selectTD.innerText;
 	this.selectTD.innerHTML = '';
 	this.selectTD.appendChild(this.input);
