@@ -227,23 +227,6 @@ function legendPositionChange(){
 </head>    
 <body>
 
-<div class="leftWindow" style="width:500px">
-    <div id='previewEditor' class='editorWindow'>
-        <div id='chart'></div>
-    </div>
-    <div id='dataEditor' class='editorWindow'>
-        <div>
-            <input type='button' value='Insert Column' onclick='tableClass.insertColumn()'>
-            <input type='button' value='Insert Row' onclick='tableClass.insertRow()'>
-            <input type='button' value='Delete Row' onclick='tableClass.deleteRow()'>
-            <input type='button' value='Delete Column' onclick='tableClass.deleteColumn()'>
-            <input type='button' value='Data Apply' onclick='DataApply()'>
-        </div>
-        <div id='dataDiv' class='dataDiv'>
-        </div>
-    </div>    
-</div>
-
 <div class="rightWindow">
     <div id='propertyEditor' class='editorWindow'>
         <table class="chartProperty" style="width:100%">
@@ -398,5 +381,23 @@ function legendPositionChange(){
         <textarea id="codeEditor" class="codeEditor" style='width: 98%; height:85%;' wrap="off" ></textarea>
     </div>
 </div>
+
+<div class="leftWindow">
+    <div id='previewEditor' class='editorWindow'>
+        <div id='chart'></div>
+    </div>
+    <div id='dataEditor' class='editorWindow'>
+        <div>
+            <input type='button' value='Insert Column' onclick='tableClass.insertColumn()'>
+            <input type='button' value='Insert Row' onclick='tableClass.insertRow()'>
+            <input type='button' value='Delete Row' onclick='tableClass.deleteRow()'>
+            <input type='button' value='Delete Column' onclick='tableClass.deleteColumn()'>
+            <input type='button' value='Data Apply' onclick='DataApply()'>
+        </div>
+        <div id='dataDiv' class='dataDiv'>
+        </div>
+    </div>    
+</div>
+
 </body>
 </html>
