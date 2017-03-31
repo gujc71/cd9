@@ -49,7 +49,7 @@ function TableClass(target, dataset) {
 
 
 TableClass.prototype.tdMousedown = function(){
-	if (d3.event.target.nodeName !== 'TD') return;
+	if (!d3.event || d3.event.target.nodeName !== 'TD') return;
 	
 	if (tableClass.selectTD) {
 		tableClass.selectTD.innerText = tableClass.input.value;
@@ -100,7 +100,7 @@ TableClass.prototype.insertColumn = function(){
 			var	newTD = td.cloneNode(true);
 			newTD.innerText ='';
 			td.parentNode.insertBefore(newTD, td.nextSibling);
-			d3.select(newTD).on("mousedown", thisclass.tdMousedown.closureListener(thisclass))
+			d3.select(newTD).on("mousedown", thisclass.tdMousedown())
         })
     var w = parseInt(d3.select(this.selectTD).style("width"));
     this.dataTable.style({"width": (parseInt(this.dataTable.style("width"))+w)+"px"});

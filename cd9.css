@@ -2,17 +2,26 @@ body{
 	font-size: 11px;
 	font-family: "Arial";
 }
+html, body { height:100%; overflow:hidden }
+
+.gu {
+	width: 100%;
+		height: 100%;
+	min-width: 1200px;
+}
 
 .leftWindow {
 	width: auto;
 	min-width: 500px;
 	margin: 5px;
 	overflow: hidden;
+	height: 100%;
 }
 .rightWindow {
 	float: right;
 	width: 600px;
 	margin: 5px;
+	height: 100%;
 }
 
 .editorWindow {
@@ -26,7 +35,8 @@ body{
 .dataDiv {
 	overflow: scroll;
 	width: 100%;
-	height: 300px;
+	height: 94%;
+	min-height: 300px;
 }
 
 .dataDiv td {

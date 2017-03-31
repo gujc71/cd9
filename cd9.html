@@ -227,176 +227,178 @@ function legendPositionChange(){
 </head>    
 <body>
 
-<div class="rightWindow">
-    <div id='propertyEditor' class='editorWindow'>
-        <table class="chartProperty" style="width:100%">
-        <tr>
-            <td colspan="4" style="text-align:center">
-                <label><input type="radio" id="chartType" name="chartType" value="rotate" checked="checked"/>Bar</label>
-                <label><input type="radio" id="chartType" name="chartType" value="bar" checked="checked"/>Column</label>
-                <label><input type="radio" id="chartType" name="chartType" value="line"/>Line</label>
-                <label><input type="radio" id="chartType" name="chartType" value="pie"/>Pie</label>
-            </td>
-        </tr>
-        <tr>
-            <td class="captionTD">Width</td>
-            <td class="inputTD"><input type="number" id="chartWidth" value="500" class="inputBox" title="Chart Width"></td>
-            <td class="captionTD">Height</td>
-            <td class="inputTD"><input type="number" id="chartHeight" value="400" class="inputBox" title="Chart Height"></td>
-        </tr>
-        <tr>
-            <td class="captionTD">Background</td>
-            <td class="inputTD"><input type="color" id="chartcolor" value="#ffffff" title="Chart Background Color" class="inputColor"/></td>
-            <td class="captionTD">Data</td>
-            <td class="inputTD">
-                <input type="color" id="dataColorDialog" value="#ffffff" title="Object(Bar/Line/Pie)Colors" class="inputColor"/>
-                <input type="text" id="dataColor" value="" title="Object(Bar/Line/Pie)Colors" class="inputBox" style="width:90px"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="captionTD">Title</td>
-            <td class="inputTD"><input type="text" id="chartTitle" value="Chart Title" class="inputBox" title="Chart Title" style="width: 150px"></td>
-            <td class="captionTD">Title Font</td>
-            <td class="inputTD">
-                <input type="number" id="chartFontsize" value="20" class="inputBox" title="Chart Title font">
-                <input type="color" id="chartFontcolor" value="#000000" title="Chart Title font Color" class="inputColor"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="captionTD">Padding</td>
-            <td colspan="3">
-                Left: <input type="number" id="paddingLeft" value="40" class="inputBoxSmall" title="The padding on the left of the chart">
-                Top: <input type="number" id="paddingTop" value="40" class="inputBoxSmall" title="The padding on the top of the chart">
-                Bottom: <input type="number" id="paddingBottom" value="0" class="inputBoxSmall" title="The padding on the bottom of the chart">
-                Right: <input type="number" id="paddingRight" value="0" class="inputBoxSmall" title="The padding on the right of the chart">
-            </td>
-        </tr>        
-        <tr>
-            <td class="captionTD">Legend</td>
-            <td class="inputTD"><label><input type="checkbox" id="legendUsed" value="Y" checked="checked"/>Used</label></td>
-            <td class="captionTD">Legend Position</td>
-            <td class="inputTD">
-                <select id="legendPosition" onchange="legendPositionChange()">
-                    <option value="bottom">bottom</option>
-                    <option value="right">right</option>
-                    <option value="inset">inset</option>
-                </select>    
-            </td>
-        </tr>
-        <tr id="legendInsetOption" style="display:none">
-            <td colspan="4">
-                anchor <select id="legendInset" title="the position of the legend">
-                    <option value="top-left">top-left</option>
-                    <option value="top-right">top-right</option>
-                    <option value="bottom-left">bottom-left</option>
-                    <option value="bottombottom-right">bottom-right</option>
-                </select>    
-                x : <input type="number" id="insetX" value="0" class="inputBox" title="set the position of the legend based on the anchor">
-                y : <input type="number" id="insetY" value="0" class="inputBox" title="set the position of the legend based on the anchor">
-                step : <input type="number" id="insetStep" value="0" class="inputBox" title="defines the max step the lagend has (e.g. If 2 set and legend has 3 legend item, the legend 2 columns)">            
-            </td>
-        </tr>        
-        <tr>
-            <td class="captionTD">Font</td>
-            <td class="inputTD3" colspan="3">
-                <select id="fontname" title="Font Name">
-                    <option value="Arial">Arial</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Verdana">Verdana</option>
-                    <option value="Courier New">Courier New</option>
-                </select>    
-                <input type="number" id="fontsize" value="10" class="inputBox" title="Font Size">
-                <input type="color"  id="fontcolor" value="#000000" title="Font Color" class="inputColor" class="inputColor"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="captionTD">Tooltip</td>
-            <td class="inputTD"><label><input type="checkbox" id="tooltipUsed" value="Y" checked="checked"/>Used</label></td>
-            <td class="captionTD">Tooltip Group</td>
-            <td class="inputTD"><label><input type="checkbox" id="tooltipGroup" value="Y" checked="checked"/>Used</label></td>
-        </tr>
-        <tr>
-            <td class="captionTD">Transition</td>
-            <td class="inputTD"><input type="number" id="duration" value="0" class="inputBox" title="transition Duration"></td>
-            <td class="captionTD">Zoom</td>
-            <td class="inputTD"><label><input type="checkbox" id="zoomUsed" value="Y"/>Used</label></td>
-        </tr>
-        <tr>
-            <td class="captionTD">Point</td>
-            <td class="inputTD"><label><input type="checkbox" id="pointUsed4line" value="Y" checked="checked"/>Used (only line)</label></td>
-            <td class="captionTD">Width ratio</td>
-            <td class="inputTD"><input type="number" id="ratio4bar" value="0.5" step="0.1" class="inputBox" title="">(only bar)</td>
-        </tr>
-        </table>
-        <hr/>
-        <table class="chartProperty" style="width:100%">
-        <tr>
-            <td class="captionTD"></td>
-            <td class="inputTD"><strong>Y Axis</strong></td>
-            <td class="captionTD"></td>
-            <td class="inputTD"><strong>X Axis</strong></td>
-        </tr>
-        <tr>
-            <td class="captionTD">Tick</td>
-            <td class="inputTD"><input type="number" id="tickCountY" value="0" class="inputBox" title="Tick Count for Y"></td>
-            <td class="captionTD">Rotate</td>
-            <td class="inputTD"><input type="number" id="tickRotateX" value="0" class="inputBox" title="Tick Rotate for X"></td>
-        </tr>
-        <tr>
-            <td class="captionTD">Format</td>
-            <td class="inputTD"><select id="chartFormat" title="formatter for y axis tick text"></select></td>
-            <td class="captionTD">Height</td>
-            <td class="inputTD"><input type="number" id="tickHeightX" value="0" class="inputBox" title="Tick Height for X"></td>
-        </tr>
-        <tr>
-            <td class="captionTD">Grid</td>
-            <td class="inputTD">
-                <label><input type="checkbox" id="gridUsedY" value="Y" checked="checked" title="Grid Line for Y"/>Used</label>
-            </td>
-            <td class="captionTD">Grid</td>
-            <td class="inputTD">
-                <label><input type="checkbox" id="gridUsedX" value="X" checked="checked" title="Grid Line for X"/>Used</label>
-            </td>
-        </tr>
-        <tr>
-            <td class="captionTD">Grid Color</td>
-            <td class="inputTD">
-                <input type="color" id="gridColor" value="#aaaaaa" title="Grid Line Color" class="inputColor"/>
-            </td>
-            <td class="captionTD"></td>
-            <td class="inputTD"></td>
-        </tr>
+<div class="gu">
+	<div class="rightWindow">
+		<div id='propertyEditor' class='editorWindow'>
+			<table class="chartProperty" style="width:100%">
+			<tr>
+				<td colspan="4" style="text-align:center">
+					<label><input type="radio" id="chartType" name="chartType" value="rotate" checked="checked"/>Bar</label>
+					<label><input type="radio" id="chartType" name="chartType" value="bar" checked="checked"/>Column</label>
+					<label><input type="radio" id="chartType" name="chartType" value="line"/>Line</label>
+					<label><input type="radio" id="chartType" name="chartType" value="pie"/>Pie</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="captionTD">Width</td>
+				<td class="inputTD"><input type="number" id="chartWidth" value="500" class="inputBox" title="Chart Width"></td>
+				<td class="captionTD">Height</td>
+				<td class="inputTD"><input type="number" id="chartHeight" value="400" class="inputBox" title="Chart Height"></td>
+			</tr>
+			<tr>
+				<td class="captionTD">Background</td>
+				<td class="inputTD"><input type="color" id="chartcolor" value="#ffffff" title="Chart Background Color" class="inputColor"/></td>
+				<td class="captionTD">Data</td>
+				<td class="inputTD">
+					<input type="color" id="dataColorDialog" value="#ffffff" title="Object(Bar/Line/Pie)Colors" class="inputColor"/>
+					<input type="text" id="dataColor" value="" title="Object(Bar/Line/Pie)Colors" class="inputBox" style="width:90px"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="captionTD">Title</td>
+				<td class="inputTD"><input type="text" id="chartTitle" value="Chart Title" class="inputBox" title="Chart Title" style="width: 150px"></td>
+				<td class="captionTD">Title Font</td>
+				<td class="inputTD">
+					<input type="number" id="chartFontsize" value="20" class="inputBox" title="Chart Title font">
+					<input type="color" id="chartFontcolor" value="#000000" title="Chart Title font Color" class="inputColor"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="captionTD">Padding</td>
+				<td colspan="3">
+					Left: <input type="number" id="paddingLeft" value="40" class="inputBoxSmall" title="The padding on the left of the chart">
+					Top: <input type="number" id="paddingTop" value="40" class="inputBoxSmall" title="The padding on the top of the chart">
+					Bottom: <input type="number" id="paddingBottom" value="0" class="inputBoxSmall" title="The padding on the bottom of the chart">
+					Right: <input type="number" id="paddingRight" value="0" class="inputBoxSmall" title="The padding on the right of the chart">
+				</td>
+			</tr>        
+			<tr>
+				<td class="captionTD">Legend</td>
+				<td class="inputTD"><label><input type="checkbox" id="legendUsed" value="Y" checked="checked"/>Used</label></td>
+				<td class="captionTD">Legend Position</td>
+				<td class="inputTD">
+					<select id="legendPosition" onchange="legendPositionChange()">
+						<option value="bottom">bottom</option>
+						<option value="right">right</option>
+						<option value="inset">inset</option>
+					</select>    
+				</td>
+			</tr>
+			<tr id="legendInsetOption" style="display:none">
+				<td colspan="4">
+					anchor <select id="legendInset" title="the position of the legend">
+						<option value="top-left">top-left</option>
+						<option value="top-right">top-right</option>
+						<option value="bottom-left">bottom-left</option>
+						<option value="bottombottom-right">bottom-right</option>
+					</select>    
+					x : <input type="number" id="insetX" value="0" class="inputBox" title="set the position of the legend based on the anchor">
+					y : <input type="number" id="insetY" value="0" class="inputBox" title="set the position of the legend based on the anchor">
+					step : <input type="number" id="insetStep" value="0" class="inputBox" title="defines the max step the lagend has (e.g. If 2 set and legend has 3 legend item, the legend 2 columns)">            
+				</td>
+			</tr>        
+			<tr>
+				<td class="captionTD">Font</td>
+				<td class="inputTD3" colspan="3">
+					<select id="fontname" title="Font Name">
+						<option value="Arial">Arial</option>
+						<option value="Times New Roman">Times New Roman</option>
+						<option value="Georgia">Georgia</option>
+						<option value="Verdana">Verdana</option>
+						<option value="Courier New">Courier New</option>
+					</select>    
+					<input type="number" id="fontsize" value="10" class="inputBox" title="Font Size">
+					<input type="color"  id="fontcolor" value="#000000" title="Font Color" class="inputColor" class="inputColor"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="captionTD">Tooltip</td>
+				<td class="inputTD"><label><input type="checkbox" id="tooltipUsed" value="Y" checked="checked"/>Used</label></td>
+				<td class="captionTD">Tooltip Group</td>
+				<td class="inputTD"><label><input type="checkbox" id="tooltipGroup" value="Y" checked="checked"/>Used</label></td>
+			</tr>
+			<tr>
+				<td class="captionTD">Transition</td>
+				<td class="inputTD"><input type="number" id="duration" value="0" class="inputBox" title="transition Duration"></td>
+				<td class="captionTD">Zoom</td>
+				<td class="inputTD"><label><input type="checkbox" id="zoomUsed" value="Y"/>Used</label></td>
+			</tr>
+			<tr>
+				<td class="captionTD">Point</td>
+				<td class="inputTD"><label><input type="checkbox" id="pointUsed4line" value="Y" checked="checked"/>Used (only line)</label></td>
+				<td class="captionTD">Width ratio</td>
+				<td class="inputTD"><input type="number" id="ratio4bar" value="0.5" step="0.1" class="inputBox" title="">(only bar)</td>
+			</tr>
+			</table>
+			<hr/>
+			<table class="chartProperty" style="width:100%">
+			<tr>
+				<td class="captionTD"></td>
+				<td class="inputTD"><strong>Y Axis</strong></td>
+				<td class="captionTD"></td>
+				<td class="inputTD"><strong>X Axis</strong></td>
+			</tr>
+			<tr>
+				<td class="captionTD">Tick</td>
+				<td class="inputTD"><input type="number" id="tickCountY" value="0" class="inputBox" title="Tick Count for Y"></td>
+				<td class="captionTD">Rotate</td>
+				<td class="inputTD"><input type="number" id="tickRotateX" value="0" class="inputBox" title="Tick Rotate for X"></td>
+			</tr>
+			<tr>
+				<td class="captionTD">Format</td>
+				<td class="inputTD"><select id="chartFormat" title="formatter for y axis tick text"></select></td>
+				<td class="captionTD">Height</td>
+				<td class="inputTD"><input type="number" id="tickHeightX" value="0" class="inputBox" title="Tick Height for X"></td>
+			</tr>
+			<tr>
+				<td class="captionTD">Grid</td>
+				<td class="inputTD">
+					<label><input type="checkbox" id="gridUsedY" value="Y" checked="checked" title="Grid Line for Y"/>Used</label>
+				</td>
+				<td class="captionTD">Grid</td>
+				<td class="inputTD">
+					<label><input type="checkbox" id="gridUsedX" value="X" checked="checked" title="Grid Line for X"/>Used</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="captionTD">Grid Color</td>
+				<td class="inputTD">
+					<input type="color" id="gridColor" value="#aaaaaa" title="Grid Line Color" class="inputColor"/>
+				</td>
+				<td class="captionTD"></td>
+				<td class="inputTD"></td>
+			</tr>
 
-        </table>
-    </div>
-
-
-    <div id='codeWindow' style='min-height:150px; height: 170px' class='editorWindow'>
-		<div>
-			<input type='button' value='preview' onclick='previewChart()'>
-			<input type='button' value='Make Code & Copy' onclick='makeChart()'>
-			<a href="http://jsbeautifier.org/" target="-" title="Click for more organized code">jsbeautifier.org</a>
+			</table>
 		</div>
-        <textarea id="codeEditor" class="codeEditor" style='width: 98%; height:85%;' wrap="off" ></textarea>
-    </div>
-</div>
 
-<div class="leftWindow">
-    <div id='previewEditor' class='editorWindow'>
-        <div id='chart'></div>
-    </div>
-    <div id='dataEditor' class='editorWindow'>
-        <div>
-            <input type='button' value='Insert Column' onclick='tableClass.insertColumn()'>
-            <input type='button' value='Insert Row' onclick='tableClass.insertRow()'>
-            <input type='button' value='Delete Row' onclick='tableClass.deleteRow()'>
-            <input type='button' value='Delete Column' onclick='tableClass.deleteColumn()'>
-            <input type='button' value='Data Apply' onclick='DataApply()'>
-        </div>
-        <div id='dataDiv' class='dataDiv'>
-        </div>
-    </div>    
+
+		<div id='codeWindow' style='min-height:150px; height:39%' class='editorWindow'>
+			<div>
+				<input type='button' value='preview' onclick='previewChart()'>
+				<input type='button' value='Make Code & Copy' onclick='makeChart()'>
+				<a href="http://jsbeautifier.org/" target="-" title="Click for more organized code">jsbeautifier.org</a>
+			</div>
+			<textarea id="codeEditor" class="codeEditor" style='width: 98%; height:85%;' wrap="off" ></textarea>
+		</div>
+	</div>
+
+	<div class="leftWindow">
+		<div id='previewEditor' class='editorWindow'>
+			<div id='chart'></div>
+		</div>
+		<div id='dataEditor' class='editorWindow' style="height:52%">
+			<div>
+				<input type='button' value='Insert Column' onclick='tableClass.insertColumn()'>
+				<input type='button' value='Insert Row' onclick='tableClass.insertRow()'>
+				<input type='button' value='Delete Row' onclick='tableClass.deleteRow()'>
+				<input type='button' value='Delete Column' onclick='tableClass.deleteColumn()'>
+				<input type='button' value='Data Apply' onclick='DataApply()'>
+			</div>
+			<div id='dataDiv' class='dataDiv'>
+			</div>
+		</div>    
+	</div>
 </div>
 
 </body>
