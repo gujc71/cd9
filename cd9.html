@@ -19,8 +19,11 @@ var dataset = [
     ];
 
 window.onload=function(){
-    var dataColorDialog = document.getElementById('dataColorDialog');
-    d3.select(dataColorDialog).on('change', colorChange);
+	if (detectIE()===false) {
+		d3.select('#dataImportDiv').style('display', 'block');
+	}
+	
+    d3.select('#dataColorDialog').on('change', colorChange);
     
     var formatlist = ['', 's', ',%', '+,%', ',.1%', '.4r', '.4f', '.4n', '.3n', ',d', ',.0f', '.0f', '.0e', '.1e'];
     d3.select('#chartFormat')
@@ -33,9 +36,10 @@ window.onload=function(){
     previewChart();
 }
 
+var chartType = null;
 function getChartProperty(chk){
     var rotated = false;
-    var chartType = document.querySelector('input[name="chartType"]:checked').value;
+    chartType = document.querySelector('input[name="chartType"]:checked').value;
     if (chartType==='rotate'){
         chartType = 'bar';
         rotated = true;
@@ -49,16 +53,11 @@ function getChartProperty(chk){
         bar: {
             width: {ratio: 0.5}
         },
-        pie: {
-          label: {
-                format: function (value, ratio, id) {
-                  return (value); 
-              }
-          }
-        },        
+        pie: {},        
+        donut: {},        
         legend:{},
         tooltip:{},
-        zoom: {}, //rescale: true}
+        zoom: {}, 
         transition: {},
         point: {},
         axis: {
@@ -66,7 +65,6 @@ function getChartProperty(chk){
             x:{tick:{}},
             y:{}
         },
-        labels: {},
         grid: {}
     };
     
@@ -86,6 +84,10 @@ function getChartProperty(chk){
         ChartProp.color.pattern = dataColor.split(',');
     }
     
+	if (chartType==='donut'){
+		ChartProp.donut.title=getElement('chartTitle').value;
+	}
+	
     ChartProp.padding = {left: getElementInt('paddingLeft'),
                          top: getElementInt('paddingTop'),
                          bottom: getElementInt('paddingBottom'),
@@ -116,10 +118,27 @@ function getChartProperty(chk){
     if (val > 0) ChartProp.transition.duration=val;
 
     ChartProp.zoom.enabled=getElement('zoomUsed').checked;
+
+    var format = d3.select('#chartFormat').property('value');
+
+    if (getElement('chartLabels').checked) {
+		if (format) {
+			ChartProp.data.labels = {format: d3.format(format)};
+		} else {
+			ChartProp.data.labels = true;
+		}
+    }
+	
+	if (!getElement('ratio4Pie').checked) {
+		if (chartType === 'pie')
+			ChartProp.pie.label={format: function (value, ratio, id) {return (value);}};
+		if (chartType === 'donut')
+			ChartProp.donut.label={format: function (value, ratio, id) {return (value);}};
+	}
     ChartProp.point.show=getElement('pointUsed4line').checked;
     ChartProp.bar.width.ratio=getElement('ratio4bar').value;
 
-    var format = d3.select('#chartFormat').property('value');
+    ///////////////////////////////////////////////////////////
     if (format) {
         if (chartType === 'pie')
             ChartProp.pie.label.format = function (value, ratio, id) {
@@ -127,7 +146,7 @@ function getChartProperty(chk){
                                           };
         else ChartProp.axis.y = {tick:{format:d3.format(format)}};    
     }
-    
+
     var tickCountY = getElementInt('tickCountY');
     if (tickCountY>0) {
         ChartProp.axis.y = {tick: {count: tickCountY}};
@@ -160,6 +179,8 @@ function previewChart(){
     
     chart = c3.generate(ChartProp);  
 
+	if (chartType==='donut'){ return}
+	
 	var svg = d3.select('svg');
 	svg.append('text')
 		.attr('x', parseInt(svg.style('width'))/2)
@@ -177,24 +198,25 @@ function makeChart(){
     var codeEditor = document.getElementById('codeEditor');
     var code = JSON.stringify(ChartProp);
     code = code.replace(/[}}\]]/gi, '$&\n');
-    codeEditor.value = 
+    var codeStr = 
         '<link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css" rel="stylesheet" type="text/css">\n'+
         '<script src="https://d3js.org/d3.v3.min.js"><\/script>\n'+
         '<script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"><\/script>\n' +
         style + '<script>\n' + 
         'var ChartProp=' + code + '\n' +
         'window.onload=function(){\n' +
-		'c3.generate(ChartProp);\n' +
-        "var svg = d3.select('svg');\n" +
+		'c3.generate(ChartProp);\n';
+
+	if (chartType!=='donut'){ 
+        codeStr += "var svg = d3.select('svg');\n" +
         "svg.append('text')\n" +
         "	.attr('x', parseInt(svg.style('width'))/2)\n" +
         "	.attr('y', " + (getElementInt('paddingTop')/2 + 10) + ")\n" +
         "	.style({'text-anchor': 'middle', 'font-size': '" + getElement('chartFontsize').value + "px', 'fill':'" + getElement('chartFontcolor').value + "'})\n" +
-        "	.text('" + getElement('chartTitle').value + "');\n"+
-		'}\n' +
-        '<\/script>\n'+
-        '<div id="chart"></div>\n';
-		
+        "	.text('" + getElement('chartTitle').value + "');\n";
+	}	
+    codeEditor.value =  codeStr + '}\n<\/script>\n<div id="chart"></div>\n';
+
     codeEditor.select();
     document.execCommand('copy');
 }
@@ -237,6 +259,7 @@ function legendPositionChange(){
 					<label><input type="radio" id="chartType" name="chartType" value="bar" checked="checked"/>Column</label>
 					<label><input type="radio" id="chartType" name="chartType" value="line"/>Line</label>
 					<label><input type="radio" id="chartType" name="chartType" value="pie"/>Pie</label>
+					<label><input type="radio" id="chartType" name="chartType" value="donut"/>Donut</label>
 				</td>
 			</tr>
 			<tr>
@@ -319,15 +342,21 @@ function legendPositionChange(){
 			</tr>
 			<tr>
 				<td class="captionTD">Transition</td>
-				<td class="inputTD"><input type="number" id="duration" value="0" class="inputBox" title="transition Duration"></td>
+				<td class="inputTD"><input type="number" id="duration" value="0" class="inputBox" title="Set duration of transition (in milliseconds) for chart animation"></td>
 				<td class="captionTD">Zoom</td>
 				<td class="inputTD"><label><input type="checkbox" id="zoomUsed" value="Y"/>Used</label></td>
 			</tr>
 			<tr>
+				<td class="captionTD">Labels</td>
+				<td class="inputTD"><label><input type="checkbox" id="chartLabels" value="Y" title="Show labels on each data points"/>Show</label></td>
+				<td class="captionTD">Show as ratio</td>
+				<td class="inputTD"><label><input type="checkbox" id="ratio4Pie" value="Y" title="the label value on each Pie or Donut piece"/>Show (only Pie & Donut)</label></td>
+			</tr>
+			<tr>
 				<td class="captionTD">Point</td>
-				<td class="inputTD"><label><input type="checkbox" id="pointUsed4line" value="Y" checked="checked"/>Used (only line)</label></td>
+				<td class="inputTD"><label><input type="checkbox" id="pointUsed4line" value="Y" checked="checked" title="show each point in line"/>Used (only line)</label></td>
 				<td class="captionTD">Width ratio</td>
-				<td class="inputTD"><input type="number" id="ratio4bar" value="0.5" step="0.1" class="inputBox" title="">(only bar)</td>
+				<td class="inputTD"><input type="number" id="ratio4bar" value="0.5" step="0.1" class="inputBox" title="the width of bar chart by ratio">(only bar)</td>
 			</tr>
 			</table>
 			<hr/>
@@ -373,13 +402,13 @@ function legendPositionChange(){
 		</div>
 
 
-		<div id='codeWindow' style='min-height:150px; height:39%' class='editorWindow'>
+		<div id='codeWindow' style='min-height:150px; height:36%' class='editorWindow'>
 			<div>
 				<input type='button' value='preview' onclick='previewChart()'>
 				<input type='button' value='Make Code & Copy' onclick='makeChart()'>
 				<a href="http://jsbeautifier.org/" target="-" title="Click for more organized code">jsbeautifier.org</a>
 			</div>
-			<textarea id="codeEditor" class="codeEditor" style='width: 98%; height:85%;' wrap="off" ></textarea>
+			<textarea id="codeEditor" class="codeEditor" style='width: 98%; height:87%;' wrap="off" ></textarea>
 		</div>
 	</div>
 
@@ -396,6 +425,10 @@ function legendPositionChange(){
 				<input type='button' value='Data Apply' onclick='DataApply()'>
 			</div>
 			<div id='dataDiv' class='dataDiv'>
+			</div>
+			<div id='dataImportDiv' class='dataImportDiv'>
+				<input type="file" id="filepath" accept=".csv" />
+				<input type="button" value="import" onClick="importData()"/>				
 			</div>
 		</div>    
 	</div>

@@ -21,22 +21,32 @@ function addStyle(id, src){
 	else document.getElementsByTagName("head")[0].appendChild(style);
 	style.innerHTML = src;
 }
+
+function detectIE() {
+  var ua = window.navigator.userAgent;
+  var msie = ua.indexOf('MSIE ');
+  if (msie > 0) {
+    return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+  }
+
+  var trident = ua.indexOf('Trident/');
+  if (trident > 0) {
+    var rv = ua.indexOf('rv:');
+    return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+  }
+
+  var edge = ua.indexOf('Edge/');
+  if (edge > 0) {
+    return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+  }
+  return false;
+}
 	
 // ///////////////////////////////////////////////////////////////////////////
 function TableClass(target, dataset) {
 	this.dataTable = d3.select("#"+target).append("table");
-	var rows = this.dataTable.selectAll("tr")
-		.data(dataset)
-		.enter()
-		.append("tr");
-			
-	var cells = rows.selectAll("td")
-		.data(function ( d ) { return d; })
-		.enter()
-		.append("td")
-			.text(function( d ) { return d; })
-			.on("mousedown", this.tdMousedown);
 
+	this.SetData(dataset);
 	
 	this.hiddenDiv = document.createElement( 'div');
 	this.hiddenDiv.style.display="none";
@@ -45,6 +55,25 @@ function TableClass(target, dataset) {
 	this.input.type = 'text'; 
 	this.input.className = 'tableInput';
 	this.hiddenDiv.appendChild(this.input);
+}
+
+TableClass.prototype.SetData = function(data){
+	var a = this.dataTable.selectAll("tr");
+	a.remove();
+	
+	var rows = this.dataTable.selectAll("tr")
+		.data(data)
+		.enter()
+		.append("tr");
+			
+	var cells = rows.selectAll("td")
+		.data(function ( d ) {return d; })
+		.enter()
+		.append("td")
+			.text(function( d ) {return d; })
+			.on("mousedown", this.tdMousedown);
+			
+    this.dataTable.style({"width": (cells[0].length*50)+"px"});
 }
 
 
@@ -87,10 +116,18 @@ TableClass.prototype.getDataArray = function(){
 }
 
 TableClass.prototype.insertColumn = function(){
-	if (!this.selectTD) return;
-	
-	var inx = this.selectTD.cellIndex;
+	var cells=this.dataTable.selectAll("tr")[0][0].cells;
+
+	var td=null;
+	if (this.selectTD) {
+		td=this.selectTD;
+	} else {
+		td=cells[cells.length-1];
+	}
+
+    var inx = td.cellIndex;
 	var thisclass = this;
+	
 	this.dataTable
 		.selectAll("tr")
 		.selectAll("td")
@@ -100,16 +137,21 @@ TableClass.prototype.insertColumn = function(){
 			var	newTD = td.cloneNode(true);
 			newTD.innerText ='';
 			td.parentNode.insertBefore(newTD, td.nextSibling);
-			d3.select(newTD).on("mousedown", thisclass.tdMousedown())
+			d3.select(newTD).on("mousedown", thisclass.tdMousedown)
         })
-    var w = parseInt(d3.select(this.selectTD).style("width"));
-    this.dataTable.style({"width": (parseInt(this.dataTable.style("width"))+w)+"px"});
+		
+    this.dataTable.style({"width": (parseInt(this.dataTable.style("width"))+50)+"px"});
 }
 
 TableClass.prototype.insertRow = function(){
-	if (!this.selectTD) return;
+	var tr = null;
+	if (this.selectTD) {
+		tr = this.selectTD.parentNode;
+	} else {
+		var rows = this.dataTable.selectAll("tr")[0];
+		tr = rows[rows.length-1];
+	}
 	
-	var tr = this.selectTD.parentNode;
     var newTR = document.createElement('tr');
 	tr.parentNode.insertBefore(newTR, tr.nextSibling);
 			
@@ -123,20 +165,38 @@ TableClass.prototype.insertRow = function(){
 }
 
 TableClass.prototype.deleteRow = function(){
-	if (!this.selectTD) return;
-
-	var tr = this.selectTD.parentNode;
+	var rows = this.dataTable.selectAll("tr")[0];
+	if (rows.length===1) {
+		alert('There is one row. You can not delete it anymore.');
+		return;
+	}
+	
+	var tr = null;
+	if (this.selectTD) {
+		tr = this.selectTD.parentNode;
+	} else {
+		tr = rows[rows.length-1];
+	}
 
 	tr.parentNode.removeChild(tr); 
 	this.selectTD = null;
 }
 
 TableClass.prototype.deleteColumn = function(){
-	if (!this.selectTD) return;
+	var cells=this.dataTable.selectAll("tr")[0][0].cells;
+	if (cells.length===1) {
+		alert('There is one column. You can not delete it anymore.');
+		return;
+	}
+	var td=null;
+	if (this.selectTD) {
+		td=this.selectTD;
+	} else {
+		td=cells[cells.length-1];
+	}
 
-    var w = parseInt(d3.select(this.selectTD).style("width"));
+    var inx = td.cellIndex;
 	
-	var inx = this.selectTD.cellIndex;
 	this.dataTable
 		.selectAll("tr")
 		.selectAll("td")
@@ -147,9 +207,41 @@ TableClass.prototype.deleteColumn = function(){
 		
 	this.selectTD = null;
 
-    this.dataTable.style({"width": (parseInt(this.dataTable.style("width"))-w)+"px"});
+    this.dataTable.style({"width": (parseInt(this.dataTable.style("width"))-50)+"px"});
 }
 
+// ///////////////////////////////////////////////////////////////////////////
+function importData(){
+	var file = d3.select("#filepath")[0][0].files[0];
+	if (!file) {
+		alert("Please select an import file");
+		return;
+	}
+	var reader = new FileReader();
+	reader.onloadend = function(evt) {
+		var dataUrl = evt.target.result;
+		loadData(dataUrl);
+	};
+	reader.readAsDataURL(file);
+}	
 
+function loadData(filePath){			
+	d3.csv(filePath, function(error, data) {
+		if (error) throw error;
 
+		var columns = Object.keys(data[0]);
+		var dataSet = [];
+		dataSet[0] = columns;
+		
+		data.forEach(function(d, i) {
+			var subData = [];
+			columns.forEach(function(sd, j) {
+				subData.push(d[sd]);	
+			});
+			dataSet[i+1] = subData;
+		});
+		
+		tableClass.SetData(dataSet);
+	});
+}
 

@@ -35,7 +35,7 @@ html, body { height:100%; overflow:hidden }
 .dataDiv {
 	overflow: scroll;
 	width: 100%;
-	height: 94%;
+	height: 90%;
 	min-height: 300px;
 }
 
@@ -61,6 +61,10 @@ html, body { height:100%; overflow:hidden }
 	background-color: yellow;
 }
 
+.dataImportDiv {
+	display: none;
+}
+	
 ///////////////////////////////////////////////
 
 .chartProperty {
